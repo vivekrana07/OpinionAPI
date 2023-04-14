@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OpinionAPI.Context;
 using OpinionAPI.Interface;
 using OpinionAPI.Model;
@@ -56,7 +57,7 @@ namespace OpinionAPI.DL
                     StatusCode = StatusCodes.Status200OK
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
                 return new ObjectResult(new { message = ex.Message.ToString() })
@@ -72,7 +73,7 @@ namespace OpinionAPI.DL
             return movies;
         }
 
-        public async Task<ActionResult> AddRating (RatingContext ratingContext)
+        public async Task<ActionResult> AddRating(RatingContext ratingContext)
         {
             try
             {
@@ -81,7 +82,8 @@ namespace OpinionAPI.DL
                     UserId = ratingContext.UserId,
                     MovieId = ratingContext.MovieId,
                     MovieRating = ratingContext.MovieRating,
-                    Comment = ratingContext.Comment
+                    Comment = ratingContext.Comment,
+
                 };
                 await _dbcontext.Rating.AddAsync(rating);
                 await _dbcontext.SaveChangesAsync();
@@ -94,9 +96,41 @@ namespace OpinionAPI.DL
             {
                 return new ObjectResult(new { message = ex.Message.ToString() })
                 {
-                    StatusCode = StatusCodes.Status403Forbidden                };
+                    StatusCode = StatusCodes.Status403Forbidden
+                };
             }
-            
+
+        }
+
+        public MoviesRating GetRating(int movieid)
+        {
+            var movie =  _dbcontext.Movies.FirstOrDefault(x => x.Id == movieid);
+            MoviesRating rating = new MoviesRating();
+            if (movie != null)
+            {
+                rating.MovieName = movie.Name;
+                rating.Description = movie.Description;
+                rating.Genre = movie.Genre;
+                rating.Image = movie.Image;
+            }
+
+            var userRating = (from rate in _dbcontext.Rating
+                             join movies in _dbcontext.Movies
+                             on rate.MovieId equals movies.Id
+                             join user in _dbcontext.Users
+                             on rate.UserId equals user.UserId
+                             where rate.MovieId == movieid
+                             select new UserRate
+                             {
+                                 Id = rate.Id,
+                                 UserName = user.UserName,
+                                 MovieName = movies.Name,
+                                 MovieRating = rate.MovieRating,
+                                 Comment = rate.Comment
+                             }).ToList();
+            rating.ratings = userRating;
+
+            return rating;
         }
     }
 }

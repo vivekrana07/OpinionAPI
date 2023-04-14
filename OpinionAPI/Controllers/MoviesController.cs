@@ -35,5 +35,12 @@ namespace OpinionAPI.Controllers
             var result = _movies.AddRating(ratingContext);
             return result;
         }
+
+        [HttpGet("GetUserRating")]
+        public MoviesRating GetUserRating(int MovieId)
+        {
+            var result = _movies.GetRating(MovieId);
+            return result;
+        }
     }
 }

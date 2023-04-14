@@ -9,5 +9,6 @@ namespace OpinionAPI.Interface
         Task<ActionResult> AddMovie(AddMoviesContext movies);
         List<Movies> GetMovies();
         Task<ActionResult> AddRating(RatingContext ratingContext);
+        MoviesRating GetRating(int movieid);
     }
 }
