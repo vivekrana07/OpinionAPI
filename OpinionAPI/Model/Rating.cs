@@ -11,6 +11,7 @@ namespace OpinionAPI.Model
         public int MovieId { get; set; }
         public int MovieRating { get; set; }
         public string? Comment { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
         public Users Users { get; set; }
         public Movies Movies { get; set; }

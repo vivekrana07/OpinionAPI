@@ -20,6 +20,7 @@ namespace OpinionAPI.Context
         public string? MovieName { get; set; }
         public int MovieRating { get; set; }
         public string? Comment { get; set; }
+        public DateTime? Created { get; set; }
 
     }
 }

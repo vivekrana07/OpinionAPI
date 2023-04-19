@@ -65,7 +65,7 @@ namespace OpinionAPI.DL
                 };
             }
 
-            return new ObjectResult(new { message = "Logged In", userId = user.UserId })
+            return new ObjectResult(new { message = "Logged In", userId = user.UserId,admin = user.IsAdmin })
             {
                 StatusCode = StatusCodes.Status200OK,
             };

@@ -83,7 +83,7 @@ namespace OpinionAPI.DL
                     MovieId = ratingContext.MovieId,
                     MovieRating = ratingContext.MovieRating,
                     Comment = ratingContext.Comment,
-
+                    CreatedOn = DateTime.Now,
                 };
                 await _dbcontext.Rating.AddAsync(rating);
                 await _dbcontext.SaveChangesAsync();
@@ -123,11 +123,12 @@ namespace OpinionAPI.DL
                              select new UserRate
                              {
                                  Id = rate.Id,
-                                 UserName = user.UserName,
+                                 UserName = user.Name,
                                  MovieName = movies.Name,
                                  MovieRating = rate.MovieRating,
-                                 Comment = rate.Comment
-                             }).ToList();
+                                 Comment = rate.Comment,
+                                 Created = rate.CreatedOn
+                             }).OrderByDescending(x=>x.Created).ToList();
             rating.ratings = userRating;
 
             return rating;
