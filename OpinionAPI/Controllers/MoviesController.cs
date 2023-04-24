@@ -16,6 +16,7 @@ namespace OpinionAPI.Controllers
             _movies = movies;
         }
 
+        [Authorize]
         [HttpPost("AddMovie")]
         public Task<ActionResult> AddMovie([FromForm] AddMoviesContext Movies)
         {
@@ -31,6 +32,7 @@ namespace OpinionAPI.Controllers
             return result;
         }
 
+        [Authorize]
         [HttpPost("AddRating")]
         public Task<ActionResult> AddRating([FromBody] RatingContext ratingContext)
         {
@@ -38,6 +40,7 @@ namespace OpinionAPI.Controllers
             return result;
         }
 
+        [Authorize]
         [HttpGet("GetUserRating")]
         public MoviesRating GetUserRating(int MovieId)
         {
