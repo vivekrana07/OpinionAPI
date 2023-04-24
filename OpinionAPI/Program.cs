@@ -40,15 +40,10 @@ builder.Services.AddScoped<Auth>();
 
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("CorsPolicy", builder =>
-    {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    });
-});
+builder.Services.AddCors(policyBuilder =>
+    policyBuilder.AddDefaultPolicy(policy =>
+        policy.WithOrigins("*").AllowAnyHeader().AllowAnyHeader())
+);
 builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
@@ -85,8 +80,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseAuthentication();
     app.UseRouting();
+    app.UseCors();
     app.UseAuthorization();
-    app.UseCors("CorsPolicy");
     app.UseEndpoints(endpoints =>
     {
         endpoints.MapControllers();

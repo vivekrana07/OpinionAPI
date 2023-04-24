@@ -70,7 +70,7 @@ namespace OpinionAPI.DL
 
             var token = _auth.GenerateJwtToken(username,user.UserId.ToString());
 
-            return new ObjectResult(new { message = "Logged In", userId = user.UserId,admin = user.IsAdmin,token = token })
+            return new ObjectResult(new { message = "Logged In", userId = user.UserId, admin = user.IsAdmin, token = token })
             {
                 StatusCode = StatusCodes.Status200OK,
             };
