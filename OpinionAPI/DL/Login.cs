@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
+using OpinionAPI.Authorization;
 using OpinionAPI.Interface;
 using OpinionAPI.Model;
 using System.Net;
@@ -10,9 +11,11 @@ namespace OpinionAPI.DL
     public class Login : IUser
     {
         private readonly OpinionDbContext _dbcontext;
-        public Login(OpinionDbContext context)
+        private readonly Auth _auth;
+        public Login(OpinionDbContext context,Auth auth)
         {
             _dbcontext = context;
+            _auth = auth;
         }
         public async Task<ActionResult> createAccount(string name, string username, string password)
         {
@@ -65,7 +68,9 @@ namespace OpinionAPI.DL
                 };
             }
 
-            return new ObjectResult(new { message = "Logged In", userId = user.UserId,admin = user.IsAdmin })
+            var token = _auth.GenerateJwtToken(username,user.UserId.ToString());
+
+            return new ObjectResult(new { message = "Logged In", userId = user.UserId,admin = user.IsAdmin,token = token })
             {
                 StatusCode = StatusCodes.Status200OK,
             };

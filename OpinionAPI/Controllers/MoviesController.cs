@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OpinionAPI.Context;
 using OpinionAPI.Interface;
 using OpinionAPI.Model;
@@ -22,6 +23,7 @@ namespace OpinionAPI.Controllers
             return result;
         }
 
+        [Authorize]
         [HttpGet("GetMovie")]
         public List<Movies> GetMovies()
         {
