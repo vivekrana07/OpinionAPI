@@ -7,5 +7,6 @@ namespace OpinionAPI.Interface
     {
         ActionResult login(string username, string password);
         Task<ActionResult> createAccount(string name, string username, string password);
+        Task<ActionResult> SaveInfo(string username, string name);
     }
 }

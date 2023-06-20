@@ -28,5 +28,12 @@ namespace OpinionAPI.Controllers
             var result =  _user.login(user.UserName, user.Password);
             return result;
         }
+
+        [HttpPost("SaveInfo")]
+        public Task<ActionResult> SaveInfo([FromBody] LoginContext user)
+        {
+            var result = _user.SaveInfo(user.UserName, user.Name);
+            return result;
+        }
     }
 }
