@@ -20,34 +20,50 @@ namespace OpinionAPI.DL
         {
             try
             {
-                string connectionString = "DefaultEndpointsProtocol=https;AccountName=opinionsvk;AccountKey=EEP5cph1EePHI6sQy5KFYAQ/JFyR6i3wuOfY8arisPautM4jskmAXowa/7fxHgXbrh9bXB2NFi5p+AStHxem3Q==;EndpointSuffix=core.windows.net";
-                string containerName = "moviestitle";
+                //string connectionString = "DefaultEndpointsProtocol=https;AccountName=opinionsvk;AccountKey=EEP5cph1EePHI6sQy5KFYAQ/JFyR6i3wuOfY8arisPautM4jskmAXowa/7fxHgXbrh9bXB2NFi5p+AStHxem3Q==;EndpointSuffix=core.windows.net";
+                //string containerName = "moviestitle";
 
-                BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+                //BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
 
-                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                //BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
-                string blobName = movies.Name + "_" + DateTime.Now.TimeOfDay + ".jpg";
+                //string blobName = movies.Name + "_" + DateTime.Now.TimeOfDay + ".jpg";
 
-                BlobUploadOptions options = new BlobUploadOptions
-                {
-                    HttpHeaders = new BlobHttpHeaders
-                    {
-                        ContentType = movies.Image.ContentType
-                    }
-                };
-                using (Stream stream = movies.Image.OpenReadStream())
-                {
-                    await containerClient.UploadBlobAsync(blobName, stream);
-                }
+                //BlobUploadOptions options = new BlobUploadOptions
+                //{
+                //    HttpHeaders = new BlobHttpHeaders
+                //    {
+                //        ContentType = movies.Image.ContentType
+                //    }
+                //};
+                //using (Stream stream = movies.Image.OpenReadStream())
+                //{
+                //    await containerClient.UploadBlobAsync(blobName, stream);
+                //}
 
-                BlobClient blobClient = containerClient.GetBlobClient(blobName);
-                string imageUrl = blobClient.Uri.ToString();
+                //BlobClient blobClient = containerClient.GetBlobClient(blobName);
+                //string imageUrl = blobClient.Uri.ToString();
+
                 Movies movieObj = new Movies();
                 movieObj.Name = movies.Name;
                 movieObj.Description = movies.Description;
                 movieObj.Genre = movies.Genre;
-                movieObj.Image = imageUrl;
+
+                movieObj.Image = string.Empty;//imageUrl;
+
+                //using (var stream = movies.Image.OpenReadStream())
+                //{
+                //    byte[] fileData = new byte[movies.Image.Length];
+                //    stream.Read(fileData, 0, fileData.Length);
+                //    movieObj.ImageByte = fileData;
+                //}
+                byte[] imageData;
+                using (var stream = new MemoryStream())
+                {
+                    await movies.Image.CopyToAsync(stream);
+                    imageData = stream.ToArray();
+                }
+                movieObj.ImageByte = imageData;
 
                 await _dbcontext.Movies.AddAsync(movieObj);
                 await _dbcontext.SaveChangesAsync();
@@ -70,6 +86,7 @@ namespace OpinionAPI.DL
         public List<Movies> GetMovies()
         {
             var movies = _dbcontext.Movies.ToList();
+
             return movies;
         }
 
@@ -112,6 +129,7 @@ namespace OpinionAPI.DL
                 rating.Description = movie.Description;
                 rating.Genre = movie.Genre;
                 rating.Image = movie.Image;
+                rating.ImageByte = movie.ImageByte;
             }
 
             var userRating = (from rate in _dbcontext.Rating

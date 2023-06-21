@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OpinionAPI.Model;
 
@@ -11,9 +12,11 @@ using OpinionAPI.Model;
 namespace OpinionAPI.Migrations
 {
     [DbContext(typeof(OpinionDbContext))]
-    partial class OpinionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230620104658_add-varbinary")]
+    partial class addvarbinary
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +47,7 @@ namespace OpinionAPI.Migrations
 
                     b.Property<byte[]>("ImageByte")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("VARBINARY(MAX)");
 
                     b.Property<string>("Name")
                         .IsRequired()

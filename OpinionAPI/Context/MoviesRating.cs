@@ -9,6 +9,7 @@ namespace OpinionAPI.Context
         public string? Description { get; set; }
         public string? Image { get; set; }
         public int? TotalRating { get; set; }
+        public byte[]? ImageByte { get; set; }
 
         public List<UserRate>? ratings { get; set; }
     }

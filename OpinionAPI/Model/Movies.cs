@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OpinionAPI.Model
 {
@@ -15,6 +16,7 @@ namespace OpinionAPI.Model
         [Required]
         public string Image { get; set; }
 
+        public byte[] ImageByte { get; set; }
         public ICollection<Rating> Ratings { get; set; }
     }
 }
